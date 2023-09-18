@@ -1,0 +1,78 @@
+---
+title: "Assignment 3"
+author: "Kelly Eng"
+date: "2023-09-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load the tidyverse package
+```{r load-tidy}
+library(tidyverse)
+```
+
+#1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r majors}
+# get the csv file linked in the article 
+url <- read.csv(url("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/all-ages.csv"))
+# put it in a dataframe
+majors <- as.data.frame(url)
+
+# filter for majors that contains DATA or STATISTICS
+dat_or_stat <- majors %>%
+  filter(str_detect(Major, "DATA|STATISTICS"))
+
+glimpse(dat_or_stat)
+dat_or_stat
+```
+
+#2 Write code that transforms the data below:
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"
+Into a format like this:
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r unclear}
+a_vector <- c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+print(a_vector)
+```
+
+#3 Describe, in words, what these expressions will match:
+
+    (.)\1\1
+    "(.)(.)\\2\\1"
+    (..)\1
+    "(.).\\1.\\1"
+    "(.)(.)(.).*\\3\\2\\1"
+
+(.)\1\1 means three of the same characters because (.) means it can be anything, the \1 have to match what is before and it appears twice.
+
+"(.)(.)\\2\\1" means the first two characters can be anything, the third character have to match the second, and the last character have to match the first.
+
+(..)\1 means the first two characters can be anything and the next group of two characters have to match the same two afterwards
+
+"(.).\\1.\\1" looks like the first one
+
+"(.)(.)(.).*\\3\\2\\1" means the first three characters could be anything, then afterwards there could be anything between or just nothing, but it has to end with whatever the third character was, then whatever the second character was, then finally whatever the first character was.
+
+
+#4 Construct regular expressions to match words that:
+
+    Start and end with the same character.
+    Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+    Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+
+
+#Credit to ChatGPT for these, I'm sorry
+
+start_and_end_same_pattern <- (.)\w*\1
+
+repeated_pair_pattern <- (\w{2}).*\1
+
+one_letter_repeat_in_at_least_three_pattern <- (\w).*\1.*\1
